@@ -68,7 +68,7 @@ public List<SkillCategory> selectSkillCategories() {
 	final String sql = "select * from skills";
 	return jdbcTemplate.query(sql, new RowMapper<SkillCategory>() {
 			public SkillCategory mapRow(ResultSet rs, int rowNum) throws SQLException{
-					return new SkillCategory(rs.getInt("id"), rs.getString("category"), rs.getString("name"), rs.getInt("score"));
+					return new SkillCategory(rs.getString("category"), rs.getString("name"), rs.getInt("score"));
 			}
 	});
 }

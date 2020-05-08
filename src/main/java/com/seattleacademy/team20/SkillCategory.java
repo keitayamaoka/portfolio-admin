@@ -2,27 +2,27 @@ package com.seattleacademy.team20;
 
 public class SkillCategory {
 
-	private int id;
+//	private int id;
 	private String category;
 	private String name;
 	private int score;
 
-	public SkillCategory (int id, String category, String name, int score) {
+	public SkillCategory (String category, String name, int score) {
 
-		this.id = id;
+//		this.id = id;
 		this.category = category;
 		this.name = name;
 		this.score = score;
 
 	}
 
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
+//	public int getId() {
+//		return id;
+//	}
+//
+//	public void setId(int id) {
+//		this.id = id;
+//	}
 
 	public String getCategory() {
 		return category;
