@@ -5,9 +5,9 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -88,15 +88,29 @@ public void uploadSkill(List<SkillCategory> categories) {
 		final FirebaseDatabase database = FirebaseDatabase.getInstance(app);
 		DatabaseReference ref = database.getReference("skills");
 
+//		List<Map<String, Object>> dataList = new ArrayList<Map<String, Object>>();
+//		Map<String, Object> dataMap;
+//		for (SkillCategory category : categories) {
+//			dataMap = new HashMap<>();
+//			dataMap.put("category", category.getCategory());
+//			dataMap.put("skills", ((Object) category.stream())
+//					.filter(s -> s.getCategory() == category.getCategory())
+//					.collect(Collectors.toList()));
+//			dataList.add(dataMap);
+//		}
 
-		List<Map<String, Object>> dataList = new ArrayList<Map<String,Object>> ();
+		List<Map<String, Object>> dataList = new LinkedList<Map<String,Object>> ();
 		Map<String, Object> dataMap;
 		Map<String,List<SkillCategory>>skillMap =  categories.stream().collect(Collectors.groupingBy(SkillCategory::getCategory));
 		for(Map.Entry<String,List<SkillCategory>> entry : skillMap.entrySet()) {
 			dataMap = new HashMap<>();
+
 			dataMap.put("category", entry.getKey());
 			dataMap.put("skill", entry.getValue());
+			switch ("category") {case "front-end": dataList.add (0, dataMap); case "back-end": dataList.add(1, dataMap); case "DevOps": dataList.add(2, dataMap);}
 			dataList.add(dataMap);
+
+			System.out.println(dataList);
 		}
 		ref.setValue(dataList, new DatabaseReference.CompletionListener() {
 				@Override
