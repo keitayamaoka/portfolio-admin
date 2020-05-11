@@ -5,9 +5,9 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -99,18 +99,36 @@ public void uploadSkill(List<SkillCategory> categories) {
 //			dataList.add(dataMap);
 //		}
 
-		List<Map<String, Object>> dataList = new LinkedList<Map<String,Object>> ();
-		Map<String, Object> dataMap;
-		Map<String,List<SkillCategory>>skillMap =  categories.stream().collect(Collectors.groupingBy(SkillCategory::getCategory));
-		for(Map.Entry<String,List<SkillCategory>> entry : skillMap.entrySet()) {
-			dataMap = new HashMap<>();
 
-			dataMap.put("category", entry.getKey());
-			dataMap.put("skill", entry.getValue());
-			switch ("category") {case "front-end": dataList.add (0, dataMap); case "back-end": dataList.add(1, dataMap); case "DevOps": dataList.add(2, dataMap);}
+		Map<String, Object> dataMap;
+		Map<String,List<SkillCategory>>skillMap =  categories.stream()
+				.collect(Collectors.groupingBy(SkillCategory::getCategory));
+		List<Map<String, Object>> dataList = new ArrayList<>(skillMap.size());
+//		for(Map.Entry<String,List<SkillCategory>> entry : skillMap.entrySet()) {
+		String[] Categories = { "front-end", "back-end", "Devops" };
+		for (String category : Categories) {
+			dataMap = new HashMap<>();
+//			dataMap.put("category", entry.getKey());
+//			dataMap.put("skill", entry.getValue());
+			dataMap.put("category", category);
+			dataMap.put("skills", skillMap.get(category));
 			dataList.add(dataMap);
 
-			System.out.println(dataList);
+//			switch (entry.getKey()) {
+//			case "front-end":
+//				dataList.add (0, dataMap);
+//				break;
+//			case "back-end":
+//				dataList.add(1, dataMap);
+//				break;
+//			case "DevOps":
+//				dataList.add(2, dataMap);
+//				break;
+//			}
+
+//			dataList.add(0,dataMap);
+//
+//			System.out.println("Test");
 		}
 		ref.setValue(dataList, new DatabaseReference.CompletionListener() {
 				@Override
