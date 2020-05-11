@@ -68,7 +68,7 @@ public List<SkillCategory> selectSkillCategories() {
 	final String sql = "select * from skills";
 	return jdbcTemplate.query(sql, new RowMapper<SkillCategory>() {
 			public SkillCategory mapRow(ResultSet rs, int rowNum) throws SQLException{
-					return new SkillCategory(rs.getInt("id"), rs.getString("category"), rs.getString("name"), rs.getInt("score"));
+					return new SkillCategory(rs.getString("category"), rs.getString("name"), rs.getInt("score"));
 			}
 	});
 }
@@ -88,15 +88,47 @@ public void uploadSkill(List<SkillCategory> categories) {
 		final FirebaseDatabase database = FirebaseDatabase.getInstance(app);
 		DatabaseReference ref = database.getReference("skills");
 
+//		List<Map<String, Object>> dataList = new ArrayList<Map<String, Object>>();
+//		Map<String, Object> dataMap;
+//		for (SkillCategory category : categories) {
+//			dataMap = new HashMap<>();
+//			dataMap.put("category", category.getCategory());
+//			dataMap.put("skills", ((Object) category.stream())
+//					.filter(s -> s.getCategory() == category.getCategory())
+//					.collect(Collectors.toList()));
+//			dataList.add(dataMap);
+//		}
 
-		List<Map<String, Object>> dataList = new ArrayList<Map<String,Object>> ();
+
 		Map<String, Object> dataMap;
-		Map<String,List<SkillCategory>>skillMap =  categories.stream().collect(Collectors.groupingBy(SkillCategory::getCategory));
-		for(Map.Entry<String,List<SkillCategory>> entry : skillMap.entrySet()) {
+		Map<String,List<SkillCategory>>skillMap =  categories.stream()
+				.collect(Collectors.groupingBy(SkillCategory::getCategory));
+		List<Map<String, Object>> dataList = new ArrayList<>(skillMap.size());
+//		for(Map.Entry<String,List<SkillCategory>> entry : skillMap.entrySet()) {
+		String[] Categories = { "front-end", "back-end", "Devops" };
+		for (String category : Categories) {
 			dataMap = new HashMap<>();
-			dataMap.put("category", entry.getKey());
-			dataMap.put("skill", entry.getValue());
+//			dataMap.put("category", entry.getKey());
+//			dataMap.put("skill", entry.getValue());
+			dataMap.put("category", category);
+			dataMap.put("skill", skillMap.get(category));
 			dataList.add(dataMap);
+
+//			switch (entry.getKey()) {
+//			case "front-end":
+//				dataList.add (0, dataMap);
+//				break;
+//			case "back-end":
+//				dataList.add(1, dataMap);
+//				break;
+//			case "DevOps":
+//				dataList.add(2, dataMap);
+//				break;
+//			}
+
+//			dataList.add(0,dataMap);
+//
+//			System.out.println("Test");
 		}
 		ref.setValue(dataList, new DatabaseReference.CompletionListener() {
 				@Override
