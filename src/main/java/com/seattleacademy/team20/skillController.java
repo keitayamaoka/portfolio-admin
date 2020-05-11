@@ -111,7 +111,7 @@ public void uploadSkill(List<SkillCategory> categories) {
 //			dataMap.put("category", entry.getKey());
 //			dataMap.put("skill", entry.getValue());
 			dataMap.put("category", category);
-			dataMap.put("skills", skillMap.get(category));
+			dataMap.put("skill", skillMap.get(category));
 			dataList.add(dataMap);
 
 //			switch (entry.getKey()) {
